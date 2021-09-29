@@ -7,7 +7,7 @@ const Home = (props) => {
   const [products, setProducts] = useState(props.products);
 
   return(
-    <div className= "product">
+    <div className= "products">
       <Head>
         <title>Home Page</title>
       </Head>
