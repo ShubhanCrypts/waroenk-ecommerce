@@ -1,7 +1,9 @@
 import { getData } from "../utils/fetchData";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import Head from "next/head";
 import ProductItem from "../components/product/ProductItem";
+
+import { DataContext } from "../store/GlobalState";
 
 const Home = (props) => {
   const [products, setProducts] = useState(props.products);
