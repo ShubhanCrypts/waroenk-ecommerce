@@ -15,10 +15,13 @@ a {
   box-sizing: border-box;
 }
 
-img{
+img {
   object-fit: cover;
   object-position: 0 30%;
 }
 
 /* ----------- Products ------------- */
-@import url("./product.css");
+@import url('./product.css');
+
+/* Loading */
+@import url('./loading.css');

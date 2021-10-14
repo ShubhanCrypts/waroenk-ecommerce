@@ -1,15 +1,64 @@
-import React from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { DataContext } from "../store/GlobalState";
 
 function NavBar() {
   const router = useRouter();
+
+  const { state, dispatch } = useContext(DataContext);
+  const { auth } = state;
+
   const isActive = (r) => {
     if (r === router.pathname) {
       return " active";
     } else {
       return "";
     }
+  };
+
+  const handleLogout = () => {
+    dispatch({ type: "AUTH", payload: {} });
+    dispatch({ type: "NOTIFY", payload: { success: "Berhasil keluar!" } });
+    // Object.keys(auth).length = 0;
+  };
+
+  const loggedRouter = () => {
+    return (
+      <li className="nav-item dropdown">
+        <a
+          className="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <img
+            src={auth.user.avatar}
+            alt={auth.user.avatar}
+            style={{
+              borderRadius: "50%",
+              width: "30px",
+              height: "30px",
+              transform: "translateY(-3px)",
+              marginRight: "3px",
+            }}
+          />
+          {auth.user.name}
+        </a>
+        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a className="dropdown-item" href="#">
+            Profile
+          </a>
+
+          <button className="dropdown-item" href="#" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
+      </li>
+    );
   };
 
   return (
@@ -42,42 +91,19 @@ function NavBar() {
                 </a>
               </Link>
             </li>
-            <li className="nav-item">
-              <Link href="/signin">
-                <a className={"nav-link" + isActive("/signin")}>
-                  <i className="fas fa-user" aria-hidden="true"></i>
-                  &nbsp;Sign in
-                </a>
-              </Link>
-            </li>
 
-            {/* <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdownMenuLink"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Username
-              </a>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="navbarDropdownMenuLink"
-              >
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Profile
+            {Object.keys(auth).length === 0 ? (
+              <li className="nav-item">
+                <Link href="/signin">
+                  <a className={"nav-link" + isActive("/signin")}>
+                    <i className="fas fa-user" aria-hidden="true"></i>
+                    &nbsp;Sign in
                   </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Logout
-                  </a>
-                </li>
-              </ul>
-            </li> */}
+                </Link>
+              </li>
+            ) : (
+              loggedRouter()
+            )}
           </ul>
         </div>
       </div>
