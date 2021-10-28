@@ -1,8 +1,8 @@
-import Head from "next/head";
-import { useState, useContext } from "react";
-import { getData } from "../../utils/fetchData";
-import { DataContext } from "../../store/GlobalState";
-import { addToCart } from "../../store/Actions";
+import Head from 'next/head';
+import { useState, useContext } from 'react';
+import { getData } from '../../utils/fetchData';
+import { DataContext } from '../../store/GlobalState';
+import { addToCart } from '../../store/Actions';
 
 const DetailProduct = (props) => {
   const [product] = useState(props.product);
@@ -12,8 +12,8 @@ const DetailProduct = (props) => {
   const { cart } = state;
 
   const isActive = (index) => {
-    if (tab === index) return " active";
-    return "";
+    if (tab === index) return ' active';
+    return '';
   };
 
   return (
@@ -27,17 +27,17 @@ const DetailProduct = (props) => {
           src={product.images[tab].url}
           alt={product.images[tab].url}
           className="d-block img-thumbnail rounded mt-4 w-100"
-          style={{ height: "350px" }}
+          style={{ height: '350px' }}
         />
 
-        <div className="row mx-0" style={{ cursor: "pointer" }}>
+        <div className="row mx-0" style={{ cursor: 'pointer' }}>
           {product.images.map((img, index) => (
             <img
               key={index}
               src={img.url}
               alt={img.url}
               className={`img-thumbnail rounded ${isActive(index)}`}
-              style={{ height: "80px", width: "20%" }}
+              style={{ height: '80px', width: '20%' }}
               onClick={() => setTab(index)}
             />
           ))}

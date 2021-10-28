@@ -1,6 +1,6 @@
-import Head from "next/head";
-import { useState } from "react";
-import { getData } from "../../utils/fetchData";
+import Head from 'next/head';
+import { useState } from 'react';
+import { getData } from '../../utils/fetchData';
 
 const DetailProduct = (props) => {
   const [product] = useState(props.product);
@@ -15,17 +15,17 @@ const DetailProduct = (props) => {
           src={product.images[0].url}
           alt={product.images[0].url}
           className="d-block img-thumbnail rounded mt-4 w-100"
-          style={{ height: "350px" }}
+          style={{ height: '350px' }}
         />
 
-        <div className="row mx-0" style={{ cursor: "pointer" }}>
+        <div className="row mx-0" style={{ cursor: 'pointer' }}>
           {product.images.map((img, index) => (
             <img
               key={index}
               src={img.url}
               alt={img.url}
               className={`img-thumbnail rounded`}
-              style={{ height: "80px", width: "20%" }}
+              style={{ height: '80px', width: '20%' }}
               //   onClick={() => setTab(index)}
             />
           ))}
