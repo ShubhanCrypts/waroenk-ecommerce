@@ -1,10 +1,10 @@
-import Head from 'next/head';
-import { useContext, useState, useEffect } from 'react';
-import { DataContext } from '../store/GlobalState';
-import CartItem from '../components/CartItem';
-import Link from 'next/link';
-import { getData, postData } from '../utils/fetchData';
-import { useRouter } from 'next/router';
+import Head from "next/head";
+import { useContext, useState, useEffect } from "react";
+import { DataContext } from "../store/GlobalState";
+import CartItem from "../components/CartItem";
+import Link from "next/link";
+import { getData, postData } from "../utils/fetchData";
+import { useRouter } from "next/router";
 
 const Cart = () => {
   const { state, dispatch } = useContext(DataContext);
@@ -12,8 +12,8 @@ const Cart = () => {
 
   const [total, setTotal] = useState(0);
 
-  const [address, setAddress] = useState('');
-  const [mobile, setMobile] = useState('');
+  const [address, setAddress] = useState("");
+  const [mobile, setMobile] = useState("");
 
   const [callback, setCallback] = useState(false);
   const router = useRouter();
@@ -31,7 +31,7 @@ const Cart = () => {
   }, [cart]);
 
   useEffect(() => {
-    const cartLocal = JSON.parse(localStorage.getItem('__next__cart01__devat'));
+    const cartLocal = JSON.parse(localStorage.getItem("__next__cart01__devat"));
     if (cartLocal && cartLocal.length > 0) {
       let newArr = [];
       const updateCart = async () => {
@@ -51,7 +51,7 @@ const Cart = () => {
           }
         }
 
-        dispatch({ type: 'ADD_CART', payload: newArr });
+        dispatch({ type: "ADD_CART", payload: newArr });
       };
 
       updateCart();
@@ -61,8 +61,8 @@ const Cart = () => {
   const handlePayment = async () => {
     if (!address || !mobile)
       return dispatch({
-        type: 'NOTIFY',
-        payload: { error: 'Please add your address and mobile.' },
+        type: "NOTIFY",
+        payload: { error: "Please add your address and mobile." },
       });
 
     let newCart = [];
@@ -76,28 +76,28 @@ const Cart = () => {
     if (newCart.length < cart.length) {
       setCallback(!callback);
       return dispatch({
-        type: 'NOTIFY',
+        type: "NOTIFY",
         payload: {
-          error: 'The product is out of stock or the quantity is insufficient.',
+          error: "The product is out of stock or the quantity is insufficient.",
         },
       });
     }
 
-    dispatch({ type: 'NOTIFY', payload: { loading: true } });
+    dispatch({ type: "NOTIFY", payload: { loading: true } });
 
-    postData('order', { address, mobile, cart, total }, auth.token).then(
+    postData("order", { address, mobile, cart, total }, auth.token).then(
       (res) => {
         if (res.err)
-          return dispatch({ type: 'NOTIFY', payload: { error: res.err } });
+          return dispatch({ type: "NOTIFY", payload: { error: res.err } });
 
-        dispatch({ type: 'ADD_CART', payload: [] });
+        dispatch({ type: "ADD_CART", payload: [] });
 
         const newOrder = {
           ...res.newOrder,
           user: auth.user,
         };
-        dispatch({ type: 'ADD_ORDERS', payload: [...orders, newOrder] });
-        dispatch({ type: 'NOTIFY', payload: { success: res.msg } });
+        dispatch({ type: "ADD_ORDERS", payload: [...orders, newOrder] });
+        dispatch({ type: "NOTIFY", payload: { success: res.msg } });
         return router.push(`/order/${res.newOrder._id}`);
       }
     );
@@ -137,9 +137,9 @@ const Cart = () => {
 
       <div className="col-md-4 my-3 text-right text-uppercase text-secondary">
         <form>
-          <h2>Shipping</h2>
+          <h2>Pengiriman</h2>
 
-          <label htmlFor="address">Address</label>
+          <label htmlFor="address">Alamat</label>
           <input
             type="text"
             name="address"
@@ -149,7 +149,7 @@ const Cart = () => {
             onChange={(e) => setAddress(e.target.value)}
           />
 
-          <label htmlFor="mobile">Mobile</label>
+          {/* <label htmlFor="mobile">Mobile</label>
           <input
             type="text"
             name="mobile"
@@ -157,14 +157,14 @@ const Cart = () => {
             className="form-control mb-2"
             value={mobile}
             onChange={(e) => setMobile(e.target.value)}
-          />
+          /> */}
         </form>
 
         <h3>
           Total: <span className="text-danger">Rp {total}</span>
         </h3>
 
-        <Link href={auth.user ? '#!' : '/signin'}>
+        <Link href={auth.user ? "#!" : "/signin"}>
           <a className="btn btn-dark my-2" onClick={handlePayment}>
             Lanjut ke Pembayaran
           </a>

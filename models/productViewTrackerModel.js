@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const productViewSchema = new mongoose.Schema(
   {
@@ -16,30 +16,30 @@ const productViewSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    content: {
-      type: String,
-      required: true,
-    },
-    images: {
-      type: Array,
-      required: true,
-    },
-    category: {
-      type: String,
-      required: true,
-    },
-    checked: {
-      type: Boolean,
-      default: false,
-    },
-    inStock: {
-      type: Number,
-      default: 0,
-    },
-    sold: {
-      type: Number,
-      default: 0,
-    },
+    // content: {
+    //   type: String,
+    //   required: true,
+    // },
+    // images: {
+    //   type: Array,
+    //   required: true,
+    // },
+    // category: {
+    //   type: String,
+    //   required: true,
+    // },
+    // checked: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // inStock: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // sold: {
+    //   type: Number,
+    //   default: 0,
+    // },
   },
   {
     timestamps: true,
@@ -47,5 +47,6 @@ const productViewSchema = new mongoose.Schema(
 );
 
 let Dataset =
-  mongoose.models.product || mongoose.model("product", productViewSchema);
+  mongoose.models.viewProduct ||
+  mongoose.model('viewProduct', productViewSchema);
 export default Dataset;
