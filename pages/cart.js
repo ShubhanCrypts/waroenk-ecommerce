@@ -13,6 +13,7 @@ const Cart = (props) => {
   const [total, setTotal] = useState(0);
   const [price, setPrice] = useState(0);
 
+  const [payment, setPayment] = useState("");
   const [address, setAddress] = useState("");
   const [mobile, setMobile] = useState("");
 
@@ -24,6 +25,11 @@ const Cart = (props) => {
   const handleChangeInput = (e) => {
     const { value } = e.target;
     setPrice(value)
+  };
+
+  const handleChangePayment = (e) => {
+    const { value } = e.target;
+    setPayment(value)
   };
   
   useEffect(() => {
@@ -166,13 +172,14 @@ const Cart = (props) => {
           <label htmlFor="address">Pembayaran</label>
           <div>
             <select
+              onChange = {handleChangePayment}
               className="form-select form-select-lg mb-3"
               aria-label=".form-select-lg example"
             >
               <option selected>Pilih Pembayaran</option>
-              <option value="1">Transfer Bank</option>
-              <option value="2">e-Wallet</option>
-              <option value="3">COD</option>
+              <option value="Transfer Bank">Transfer Bank</option>
+              <option value="e-Wallet">e-Wallet</option>
+              <option value="COD">COD</option>
             </select>
           </div>
           <label htmlFor="address">Kurir</label>
