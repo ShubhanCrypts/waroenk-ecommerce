@@ -11,6 +11,7 @@ const Cart = (props) => {
   const { cart, auth, orders } = state;
 
   const [total, setTotal] = useState(0);
+  const [price, setPrice] = useState(0);
 
   const [address, setAddress] = useState("");
   const [mobile, setMobile] = useState("");
@@ -20,12 +21,17 @@ const Cart = (props) => {
 
   const [couriers, setCouriers] = useState(props.couriers);
 
+  const handleChangeInput = (e) => {
+    const { value } = e.target;
+    setPrice(value)
+  };
+  
   useEffect(() => {
     const getTotal = () => {
       const res = cart.reduce((prev, item) => {
         return prev + item.price * item.quantity;
       }, 0);
-
+     
       setTotal(res);
     };
 
@@ -169,10 +175,26 @@ const Cart = (props) => {
               <option value="3">COD</option>
             </select>
           </div>
+          <label htmlFor="address">Kurir</label>
+          <div>
+            <select
+              onChange={handleChangeInput}
+              value={price}
+              className="form-select form-select-lg mb-3"
+              aria-label=".form-select-lg example"
+            >
+              <option selected value= "00" >Pilih Kurir</option>
+              {couriers.map((courier) => (
+                <option key={courier._id} value={courier.price}>
+                  {courier.courier_name}
+                </option>
+              ))}
+            </select>
+          </div>
         </form>
 
         <h3>
-          Total: <span className="text-danger">Rp {total}</span>
+          Total: <span className="text-danger">Rp {total+parseInt(price)}</span>
         </h3>
 
         <Link href="/product">
@@ -180,11 +202,6 @@ const Cart = (props) => {
             Lanjut ke Pembayaran
           </a>
         </Link>
-        {couriers.length === 0 ? (
-          <h2>No product</h2>
-        ) : (
-          couriers.map((courier) => <p>{courier.courier_name}</p>)
-        )}
       </div>
     </div>
   );
