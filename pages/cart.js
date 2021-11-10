@@ -13,11 +13,10 @@ const Cart = (props) => {
   const [total, setTotal] = useState(0);
   const [price, setPrice] = useState(0);
 
-  const [address, setAddress] = useState('');
-
   const [payment, setPayment] = useState("");
   const [address, setAddress] = useState("");
   const [mobile, setMobile] = useState("");
+  const [kurir, setKurir] = useState("");
 
 
   const [callback, setCallback] = useState(false);
@@ -33,6 +32,11 @@ const Cart = (props) => {
   const handleChangePayment = (e) => {
     const { value } = e.target;
     setPayment(value)
+  };
+
+  const handleChangeCouriers = (e) => {
+    const { value } = e.target;
+    setKurir(value)
   };
   
   useEffect(() => {
@@ -132,16 +136,9 @@ const Cart = (props) => {
     const handleClick = async () => {
       router.push({
         pathname: '/rangkuman',
-        query: { alamat: address, jumlah: total, cart: cart},
+        query: { alamat: address, jumlah: total+parseInt(price), payment: payment, kurir: couriers },
       });
     };
-
-  const handleClick = async () => {
-    router.push({
-      pathname: "/product",
-      query: { alamat: address },
-    });
-  };
 
   return (
     <div className='row mx-auto'>
@@ -193,10 +190,10 @@ const Cart = (props) => {
               <option value="COD">COD</option>
             </select>
           </div>
+
           <label htmlFor="address">Kurir</label>
           <div>
             <select
-              onChange={handleChangeInput}
               value={price}
               className="form-select form-select-lg mb-3"
               aria-label=".form-select-lg example"
@@ -206,6 +203,7 @@ const Cart = (props) => {
                 <option key={courier._id} value={courier.price}>
                   {courier.courier_name}
                 </option>
+                
               ))}
             </select>
           </div>
