@@ -6,23 +6,41 @@ import Link from 'next/link';
 import { getData, postData } from '../utils/fetchData';
 import { useRouter } from 'next/router';
 
-const Cart = () => {
+const Cart = (props) => {
   const { state, dispatch } = useContext(DataContext);
   const { cart, auth, orders } = state;
 
   const [total, setTotal] = useState(0);
+  const [price, setPrice] = useState(0);
 
   const [address, setAddress] = useState('');
+
+  const [payment, setPayment] = useState("");
+  const [address, setAddress] = useState("");
+  const [mobile, setMobile] = useState("");
+
 
   const [callback, setCallback] = useState(false);
   const router = useRouter();
 
+  const [couriers, setCouriers] = useState(props.couriers);
+
+  const handleChangeInput = (e) => {
+    const { value } = e.target;
+    setPrice(value)
+  };
+
+  const handleChangePayment = (e) => {
+    const { value } = e.target;
+    setPayment(value)
+  };
+  
   useEffect(() => {
     const getTotal = () => {
       const res = cart.reduce((prev, item) => {
         return prev + item.price * item.quantity;
       }, 0);
-
+     
       setTotal(res);
     };
 
@@ -118,6 +136,13 @@ const Cart = () => {
       });
     };
 
+  const handleClick = async () => {
+    router.push({
+      pathname: "/product",
+      query: { alamat: address },
+    });
+  };
+
   return (
     <div className='row mx-auto'>
       <Head>
@@ -154,27 +179,47 @@ const Cart = () => {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
-          <label htmlFor='address'>Pembayaran</label>
+
+          <label htmlFor="address">Pembayaran</label>
           <div>
             <select
-              id="selected"
-              className='form-select form-select-lg mb-3'
-              aria-label='.form-select-lg example'>
-              <option value='0'>Pilih Pembayaran</option>
-              <option value='1'>Transfer Bank</option>
-              <option value='2'>e-Wallet</option>
-              <option value='3'>COD</option>
+              onChange = {handleChangePayment}
+              className="form-select form-select-lg mb-3"
+              aria-label=".form-select-lg example"
+            >
+              <option selected>Pilih Pembayaran</option>
+              <option value="Transfer Bank">Transfer Bank</option>
+              <option value="e-Wallet">e-Wallet</option>
+              <option value="COD">COD</option>
+            </select>
+          </div>
+          <label htmlFor="address">Kurir</label>
+          <div>
+            <select
+              onChange={handleChangeInput}
+              value={price}
+              className="form-select form-select-lg mb-3"
+              aria-label=".form-select-lg example"
+            >
+              <option selected value= "00" >Pilih Kurir</option>
+              {couriers.map((courier) => (
+                <option key={courier._id} value={courier.price}>
+                  {courier.courier_name}
+                </option>
+              ))}
             </select>
           </div>
         </form>
         
 
         <h3>
-          Total: <span className='text-danger'>Rp {total}</span>
+
+          Total: <span className="text-danger">Rp {total+parseInt(price)}</span>
         </h3>
 
         <Link href="/rangkuman">
-          <a className='btn btn-dark my-2' onClick = {handleClick}>
+          <a className="btn btn-dark my-2" onClick={handleClick}>
+
             Lanjut ke Pembayaran
           </a>
         </Link>
@@ -182,5 +227,16 @@ const Cart = () => {
     </div>
   );
 };
+
+export async function getServerSideProps() {
+  const res = await getData("courier");
+
+  return {
+    props: {
+      couriers: res.couriers,
+      result: res.result,
+    },
+  };
+}
 
 export default Cart;
