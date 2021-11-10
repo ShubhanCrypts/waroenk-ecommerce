@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const connectDB = () => {
   if (mongoose.connections[0].readyState) {
-    console.log("Already connected.");
+    console.log('Already connected.');
     return;
   }
   mongoose.connect(
@@ -15,7 +15,7 @@ const connectDB = () => {
     // },
     (err) => {
       if (err) throw err;
-      console.log("Connected to mongodb.");
+      console.log('Connected to mongodb.');
     }
   );
 };
