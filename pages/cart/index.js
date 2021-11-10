@@ -1,9 +1,9 @@
 import Head from "next/head";
 import { useContext, useState, useEffect } from "react";
-import { DataContext } from "../store/GlobalState";
-import CartItem from "../components/CartItem";
+import { DataContext } from "../../store/GlobalState";
+import CartItem from "../../components/CartItem";
 import Link from "next/link";
-import { getData, postData } from "../utils/fetchData";
+import { getData, postData } from "../../utils/fetchData";
 import { useRouter } from "next/router";
 
 const Cart = () => {
@@ -59,10 +59,10 @@ const Cart = () => {
   }, [callback]);
 
   const handlePayment = async () => {
-    if (!address || !mobile)
+    if (!address)
       return dispatch({
         type: "NOTIFY",
-        payload: { error: "Please add your address and mobile." },
+        payload: { error: "Please add your address " },
       });
 
     let newCart = [];
@@ -82,10 +82,9 @@ const Cart = () => {
         },
       });
     }
-
-    dispatch({ type: "NOTIFY", payload: { loading: true } });
-
-    postData("order", { address, mobile, cart, total }, auth.token).then(
+   
+    
+    postData("order", { address, cart, total }, auth.token).then(
       (res) => {
         if (res.err)
           return dispatch({ type: "NOTIFY", payload: { error: res.err } });
@@ -98,7 +97,8 @@ const Cart = () => {
         };
         dispatch({ type: "ADD_ORDERS", payload: [...orders, newOrder] });
         dispatch({ type: "NOTIFY", payload: { success: res.msg } });
-        return router.push(`/order/${res.newOrder._id}`);
+        console.log(res.id)
+        return router.push(`/cart/${res.id}`);
       }
     );
   };
@@ -164,11 +164,10 @@ const Cart = () => {
           Total: <span className="text-danger">Rp {total}</span>
         </h3>
 
-        <Link href={auth.user ? "#!" : "/signin"}>
-          <a className="btn btn-dark my-2" onClick={handlePayment}>
-            Lanjut ke Pembayaran
-          </a>
-        </Link>
+        <a className="btn btn-dark my-2" onClick={handlePayment}>
+            Next
+        </a>
+         
       </div>
     </div>
   );
