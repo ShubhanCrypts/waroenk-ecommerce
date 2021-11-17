@@ -48,8 +48,10 @@ const createProduct = async (req, res) => {
     )
       return res.status(400).json({ err: "Please add all the fields." });
 
+
     // const product = await Products.findOne({product_id})
     // if(product) return res.status(400).json({err: 'This product already exist.'})
+
 
     const newProduct = new Products({
       title: title.toLowerCase(),

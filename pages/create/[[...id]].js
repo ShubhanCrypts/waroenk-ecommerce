@@ -10,9 +10,10 @@ const ProductsManager = () => {
     title: "",
     price: 0,
     inStock: 0,
-    description: "",
-    content: "",
-    category: "5faa35b58fdff228384d51da",
+    description: '',
+    content: '',
+    category: ''
+
   };
   const [product, setProduct] = useState(initialState);
   const { title, price, inStock, description, content, category } = product;
@@ -112,8 +113,8 @@ const ProductsManager = () => {
 
     dispatch({ type: "NOTIFY", payload: { loading: true } });
     let media = [];
-    const imgNewURL = images.filter((img) => !img.url);
-    const imgOldURL = images.filter((img) => img.url);
+    const imgNewURL = images.filter(img => !img.url);
+    const imgOldURL = images.filter(img => img.url);
 
     if (imgNewURL.length > 0) media = await imageUpload(imgNewURL);
 
