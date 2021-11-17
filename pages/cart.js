@@ -16,8 +16,8 @@ const Cart = (props) => {
   const [payment, setPayment] = useState("");
   const [address, setAddress] = useState("");
   const [mobile, setMobile] = useState("");
-  const [kurir, setKurir] = useState("");
-
+  const [kurir, setKurir] = useState(""); //Mencatat nama kurir. Dikirimkan ke "/rangkuman"
+  const [kurirPrice, setKurirPrice] = useState(""); //Mencatat biaya kurir. Digunakan di sini saja untuk menghitung harga total
 
   const [callback, setCallback] = useState(false);
   const router = useRouter();
@@ -26,7 +26,8 @@ const Cart = (props) => {
 
   const handleChangeInput = (e) => {
     const { value } = e.target;
-    setPrice(value)
+    setPrice(value);
+    setKurirPrice(value)
   };
 
   const handleChangePayment = (e) => {
@@ -136,7 +137,7 @@ const Cart = (props) => {
     const handleClick = async () => {
       router.push({
         pathname: '/rangkuman',
-        query: { alamat: address, jumlah: total+parseInt(price), payment: payment, kurir: couriers },
+        query: { alamat: address, jumlah: total+parseInt(price), payment: payment, kurir: kurir },
       });
     };
 
@@ -194,13 +195,13 @@ const Cart = (props) => {
           <label htmlFor="address">Kurir</label>
           <div>
             <select
-              value={price}
+              onChange={handleChangeCouriers}
               className="form-select form-select-lg mb-3"
               aria-label=".form-select-lg example"
             >
               <option selected value= "00" >Pilih Kurir</option>
               {couriers.map((courier) => (
-                <option key={courier._id} value={courier.price}>
+                <option key={courier._id} value={courier.courier_name}>
                   {courier.courier_name}
                 </option>
                 
