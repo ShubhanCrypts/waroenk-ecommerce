@@ -2,13 +2,15 @@ import Head from 'next/head'
 import { useState, useContext, useEffect } from 'react'
 import { DataContext } from '../store/GlobalState'
 import Link from 'next/link'
-
+import { getData, postData } from "../utils/fetchData"
 import valid from '../utils/valid'
 import { patchData } from '../utils/fetchData'
 
 import {imageUpload} from '../utils/imageUpload'
 
-const Profile = () => {
+const Profile = (props) => {
+    const [orders, setorders] = useState(props.orders);
+
     const initialSate = {
         avatar: '',
         name: '',
@@ -19,7 +21,7 @@ const Profile = () => {
     const { avatar, name, password, cf_password } = data
 
     const {state, dispatch} = useContext(DataContext)
-    const { auth, notify, orders } = state
+    const { auth, notify} = state
 
     useEffect(() => {
         if(auth.user) setData({...data, name: auth.user.name})
@@ -150,8 +152,8 @@ const Profile = () => {
                                     <td className="p-2">id</td>
                                     <td className="p-2">date</td>
                                     <td className="p-2">total</td>
-                                    <td className="p-2">delivered</td>
-                                    <td className="p-2">paid</td>
+                                    <td className="p-2">Address</td>
+                                    <td className="p-2">Payment</td>
                                 </tr>
                             </thead>
 
@@ -168,21 +170,9 @@ const Profile = () => {
                                             <td className="p-2">
                                                 {new Date(order.createdAt).toLocaleDateString()}
                                             </td>
-                                            <td className="p-2">${order.total}</td>
-                                            <td className="p-2">
-                                                {
-                                                    order.delivered
-                                                    ? <i className="fas fa-check text-success"></i>
-                                                    : <i className="fas fa-times text-danger"></i>
-                                                }
-                                            </td>
-                                            <td className="p-2">
-                                                {
-                                                    order.paid
-                                                    ? <i className="fas fa-check text-success"></i>
-                                                    : <i className="fas fa-times text-danger"></i>
-                                                }
-                                            </td>
+                                            <td className="p-2">Rp{order.total}</td>
+                                            <td className="p-2">{order.address}</td>
+                                            <td className="p-2">{order.payment}</td>
                                         </tr> 
                                     ))
                                 }
@@ -195,5 +185,16 @@ const Profile = () => {
         </div>
     )
 }
+
+export async function getServerSideProps() {
+    const res = await getData("userOrder");
+  
+    return {
+      props: {
+        orders: res.order,
+        result: res.result,
+      },
+    };
+  }
 
 export default Profile
