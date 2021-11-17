@@ -1,5 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 const Product = (props) => {
   const router = useRouter();

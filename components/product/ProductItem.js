@@ -27,13 +27,11 @@ const ProductItem = ({ product }) => {
   const userLink = () => {
     return (
       <>
-        <button>
-          <Link href={`product/${product._id}`}>
-            <a className="btn btn-info" style={{ marginRight: "5px", flex: 1 }}>
-              View
-            </a>
-          </Link>
-        </button>
+        <Link href={`product/${product._id}`}>
+          <a className="btn btn-info" style={{ marginRight: "5px", flex: 1 }}>
+            View
+          </a>
+        </Link>
 
         <button
           className="btn btn-success"
@@ -95,9 +93,9 @@ const ProductItem = ({ product }) => {
         <div className="row justify-content-between mx-0">
           <h6 className="text-danger">Rp{product.price}</h6>
           {product.inStock > 0 ? (
-            <h6 className="text-danger">In Stock: {product.inStock}</h6>
+            <h6 className="text-danger">Tersedia: {product.inStock}</h6>
           ) : (
-            <h6 className="text-danger">Out Stock</h6>
+            <h6 className="text-danger">Habis</h6>
           )}
         </div>
 

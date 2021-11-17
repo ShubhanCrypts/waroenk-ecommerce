@@ -38,9 +38,6 @@ const createProduct = async (req, res) => {
     if(!title || !price || !inStock || !description || !content || category === 'all' || images.length === 0)
     return res.status(400).json({err: 'Please add all the fields.'})
 
-    const product = await Products.findOne({product_id})
-    if(product) return res.status(400).json({err: 'This product already exist.'})
-
     const newProduct = new Products({
       title: title.toLowerCase(), price, inStock, description, content, category, images
     })

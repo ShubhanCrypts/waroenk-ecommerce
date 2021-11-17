@@ -15,12 +15,16 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    payment: {
+      type: String,
+      required: true,
+      trim: true,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-let Dataset =
-  mongoose.models.order || mongoose.model("order", orderSchema);
+let Dataset = mongoose.models.order || mongoose.model("order", orderSchema);
 export default Dataset;
