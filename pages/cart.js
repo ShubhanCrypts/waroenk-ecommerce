@@ -26,8 +26,7 @@ const Cart = (props) => {
 
   const handleChangeInput = (e) => {
     const { value } = e.target;
-    setPrice(value);
-    setKurirPrice(value)
+    setPrice(value)
   };
 
   const handleChangePayment = (e) => {
@@ -37,7 +36,8 @@ const Cart = (props) => {
 
   const handleChangeCouriers = (e) => {
     const { value } = e.target;
-    setKurir(value)
+    setKurir(value);
+    setKurirPrice(value)
   };
   
   useEffect(() => {
