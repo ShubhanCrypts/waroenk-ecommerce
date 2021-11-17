@@ -198,6 +198,7 @@ const Cart = (props) => {
           <label htmlFor="address">Kurir</label>
           <div>
             <select
+              onChange={handleChangeInput}
               value={price}
               className="form-select form-select-lg mb-3"
               aria-label=".form-select-lg example"
