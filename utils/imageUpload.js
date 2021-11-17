@@ -3,10 +3,10 @@ export const imageUpload = async (images) => {
     for(const item of images){
         const formData = new FormData()
         formData.append("file", item)
-        formData.append("upload_preset", process.env.CLOUD_UPDATE_PRESET)
-        formData.append("cloud_name", process.env.CLOUD_NAME)
+        formData.append("upload_preset", "waroenk")
+        formData.append("cloud_name", "shubhan-cloud")
 
-        const res = await fetch(process.env.CLOUD_API, {
+        const res = await fetch("https://api.cloudinary.com/v1_1/shubhan-cloud/upload", {
             method: "POST",
             body: formData
         })
