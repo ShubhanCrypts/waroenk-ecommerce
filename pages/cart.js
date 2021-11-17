@@ -35,9 +35,10 @@ const Cart = (props) => {
   };
 
   const handleChangeCouriers = (e) => {
-    const { value } = e.target;
-    setKurir(value);
-    setKurirPrice(value)
+    var { value } = e.target;
+    value = value.split(",");
+    setKurir(value[0]);
+    setKurirPrice(value[1])
   };
   
   useEffect(() => {
@@ -137,7 +138,7 @@ const Cart = (props) => {
     const handleClick = async () => {
       router.push({
         pathname: '/rangkuman',
-        query: { alamat: address, jumlah: total+parseInt(price), payment: payment, kurir: kurir },
+        query: { alamat: address, jumlah: total+parseInt(price)+(parseInt(kurirPrice)||0), payment: payment, kurir: kurir },
       });
     };
 
@@ -201,7 +202,7 @@ const Cart = (props) => {
             >
               <option selected value= "00" >Pilih Kurir</option>
               {couriers.map((courier) => (
-                <option key={courier._id} value={courier.courier_name}>
+                <option key={courier._id} value={[courier.courier_name, courier.price]}>
                   {courier.courier_name}
                 </option>
                 
@@ -213,7 +214,7 @@ const Cart = (props) => {
 
         <h3>
 
-          Total: <span className="text-danger">Rp {total+parseInt(price)}</span>
+          Total: <span className="text-danger">Rp {total+parseInt(price)+(parseInt(kurirPrice)||0)}</span>
         </h3>
 
         <Link href="/rangkuman">
