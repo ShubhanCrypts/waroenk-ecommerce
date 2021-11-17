@@ -6,17 +6,39 @@ import Link from "next/link";
 import { getData, postData } from "../../utils/fetchData";
 import { useRouter } from "next/router";
 
-const Cart = () => {
+const Cart = (props) => {
   const { state, dispatch } = useContext(DataContext);
   const { cart, auth, orders } = state;
 
   const [total, setTotal] = useState(0);
+  const [price, setPrice] = useState(0);
 
+  const [payment, setPayment] = useState("");
   const [address, setAddress] = useState("");
   const [mobile, setMobile] = useState("");
+  const [kurir, setKurir] = useState("");
 
   const [callback, setCallback] = useState(false);
   const router = useRouter();
+
+  const [couriers, setCouriers] = useState(props.couriers);
+  const [jumlah, setJumlah] = useState(0);
+  // setJumlah(total + price);
+
+  const handleChangeInput = (e) => {
+    const { value } = e.target;
+    setPrice(value);
+  };
+
+  const handleChangePayment = (e) => {
+    const { value } = e.target;
+    setPayment(value);
+  };
+
+  const handleChangeCouriers = (e) => {
+    const { value } = e.target;
+    setKurir(value);
+  };
 
   useEffect(() => {
     const getTotal = () => {
@@ -62,7 +84,7 @@ const Cart = () => {
     if (!address)
       return dispatch({
         type: "NOTIFY",
-        payload: { error: "Please add your address " },
+        payload: { error: "Please add your address and mobile." },
       });
 
     let newCart = [];
@@ -82,9 +104,10 @@ const Cart = () => {
         },
       });
     }
-   
-    
-    postData("order", { address, cart, total }, auth.token).then(
+
+    dispatch({ type: "NOTIFY", payload: { loading: true } });
+
+    postData("order", { address, cart, total, payment }, auth.token).then(
       (res) => {
         if (res.err)
           return dispatch({ type: "NOTIFY", payload: { error: res.err } });
@@ -97,8 +120,7 @@ const Cart = () => {
         };
         dispatch({ type: "ADD_ORDERS", payload: [...orders, newOrder] });
         dispatch({ type: "NOTIFY", payload: { success: res.msg } });
-        console.log(res.id)
-        return router.push(`/cart/${res.id}`);
+        // return router.push(`/order/${res.newOrder._id}`);
       }
     );
   };
@@ -111,6 +133,18 @@ const Cart = () => {
         alt="not empty"
       />
     );
+
+  const handleClick = async () => {
+    router.push({
+      pathname: "/rangkuman",
+      query: {
+        alamat: address,
+        jumlah: total + parseInt(price),
+        payment: payment,
+        kurir: couriers,
+      },
+    });
+  };
 
   return (
     <div className="row mx-auto">
@@ -149,28 +183,66 @@ const Cart = () => {
             onChange={(e) => setAddress(e.target.value)}
           />
 
-          {/* <label htmlFor="mobile">Mobile</label>
-          <input
-            type="text"
-            name="mobile"
-            id="mobile"
-            className="form-control mb-2"
-            value={mobile}
-            onChange={(e) => setMobile(e.target.value)}
-          /> */}
+          <label htmlFor="address">Pembayaran</label>
+          <div>
+            <select
+              onChange={handleChangePayment}
+              className="form-select form-select-lg mb-3"
+              aria-label=".form-select-lg example"
+            >
+              <option selected>Pilih Pembayaran</option>
+              <option value="Transfer Bank">Transfer Bank</option>
+              <option value="e-Wallet">e-Wallet</option>
+              <option value="COD">COD</option>
+            </select>
+          </div>
+
+          <label htmlFor="address">Kurir</label>
+          <div>
+            <select
+              value={price}
+              className="form-select form-select-lg mb-3"
+              aria-label=".form-select-lg example"
+            >
+              <option selected value="00">
+                Pilih Kurir
+              </option>
+              {couriers.map((courier) => (
+                <option key={courier._id} value={courier.price}>
+                  {courier.courier_name}
+                </option>
+              ))}
+            </select>
+          </div>
         </form>
 
         <h3>
-          Total: <span className="text-danger">Rp {total}</span>
+          Total:{" "}
+          <span className="text-danger">Rp {total + parseInt(price)}</span>
         </h3>
 
-        <a className="btn btn-dark my-2" onClick={handlePayment}>
-            Next
-        </a>
-         
+        <Link href="/rangkuman">
+          <a
+            className="btn btn-dark my-2"
+            onClick={(handleClick, handlePayment)}
+          >
+            Lanjut ke Pembayaran
+          </a>
+        </Link>
       </div>
     </div>
   );
 };
+
+export async function getServerSideProps() {
+  const res = await getData("courier");
+
+  return {
+    props: {
+      couriers: res.couriers,
+      result: res.result,
+    },
+  };
+}
 
 export default Cart;
