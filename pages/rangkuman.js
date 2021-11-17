@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import CartItem from "../components/CartItem";
+import { useContext, useState, useEffect } from "react";
+import Cartlist from "./Cartlist";
+import { DataContext } from "../store/GlobalState";
 
 const Rangkuman = () => {
+  const { state, dispatch } = useContext(DataContext);
+  const { cart, auth, orders } = state;
   const router = useRouter();
   const {
-    query: { alamat, jumlah, cart, kurir },
+    query: { alamat, jumlah, payment, kurir },
   } = router;
 
   return (
@@ -24,9 +28,14 @@ const Rangkuman = () => {
                   <td className="p-2">PESANAN</td>
                 </tr>
               </thead>
-              <tr>
-                <td className="p-2">{cart}</td>
-              </tr>
+              {cart.map((item) => (
+                <Cartlist
+                  key={item._id}
+                  item={item}
+                  dispatch={dispatch}
+                  cart={cart}
+                />
+              ))}
               <thead className="bg-light font-weight-bold">
                 <tr>
                   <td className="p-2">ALAMAT</td>
@@ -50,13 +59,13 @@ const Rangkuman = () => {
               </thead>
               <tr>
                 <td className="p-2">{jumlah}</td>
-                <td className="p-2">Metode</td>
+                <td className="p-2">{payment}</td>
                 <td className="p-2">{kurir}</td>
               </tr>
             </table>
           </div>
           <Link href="/product">
-            <a className="btn btn-dark my-3">Proses Pembayaran</a>
+            <a className="btn btn-dark my-3">Pay</a>
           </Link>
         </div>
       </div>
