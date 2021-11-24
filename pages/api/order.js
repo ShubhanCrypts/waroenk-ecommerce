@@ -40,7 +40,7 @@ const createorder = async (req, res) => {
         //
       } else {
         return res.json({
-          msg: "Success! Created a new order",
+          msg: "Pesanan berhasil di proses!",
           id: result._id,
         });
       }
