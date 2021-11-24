@@ -16,7 +16,8 @@ const Cart = (props) => {
   const [payment, setPayment] = useState("");
   const [address, setAddress] = useState("");
   const [mobile, setMobile] = useState("");
-  const [kurir, setKurir] = useState("");
+  const [kurir, setKurir] = useState(""); //Mencatat nama kurir. Dikirimkan ke "/rangkuman"
+  const [kurirPrice, setKurirPrice] = useState(""); //Mencatat biaya kurir. Digunakan di sini saja untuk menghitung harga
 
   const [callback, setCallback] = useState(false);
   const router = useRouter();
@@ -34,8 +35,10 @@ const Cart = (props) => {
   };
 
   const handleChangeCouriers = (e) => {
-    const { value } = e.target;
-    setKurir(value);
+    var { value } = e.target;
+    value = value.split(",");
+    setKurir(value[0]);
+    setKurirPrice(value[1])
   };
 
   useEffect(() => {
@@ -131,13 +134,13 @@ const Cart = (props) => {
         alt="not empty"
       />
     );
-
+  
   const handleClick = async () => {
     router.push({
       pathname: "/rangkuman",
       query: {
         address: address,
-        total: total + parseInt(price),
+        total: total + parseInt(price) + (parseInt(kurirPrice) || 0),
         payment: payment,
         kurir: couriers,
       },
@@ -198,8 +201,7 @@ const Cart = (props) => {
           <label htmlFor="address">Kurir</label>
           <div>
             <select
-              onChange={handleChangeInput}
-              value={price}
+              onChange={handleChangeCouriers}
               className="form-select form-select-lg mb-3"
               aria-label=".form-select-lg example"
             >
@@ -207,7 +209,7 @@ const Cart = (props) => {
                 Pilih Kurir
               </option>
               {couriers.map((courier) => (
-                <option key={courier._id} value={courier.price}>
+                <option key={courier._id} value={[courier.courier_name, courier.price]}>
                   {courier.courier_name}
                 </option>
               ))}
@@ -217,7 +219,7 @@ const Cart = (props) => {
 
         <h3>
           Total:{" "}
-          <span className="text-danger">Rp {total + parseInt(price)}</span>
+          <span className="text-danger">Rp {total + parseInt(price) + (parseInt(kurirPrice) || 0)}</span>
         </h3>
 
         <Link href="/rangkuman">
