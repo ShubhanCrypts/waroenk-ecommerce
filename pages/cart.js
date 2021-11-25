@@ -142,7 +142,7 @@ const Cart = (props) => {
         address: address,
         total: total + parseInt(price) + (parseInt(kurirPrice) || 0),
         payment: payment,
-        kurir: couriers,
+        kurir: kurir,
       },
     });
   };
